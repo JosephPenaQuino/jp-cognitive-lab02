@@ -1,25 +1,60 @@
-<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block body %}
 
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Joseph's page</title>
-		<meta name='viewport' content='width=device-width, initial-scale=1'>
-		<link rel="stylesheet" href="https://bootswatch.com/4/materia/bootstrap.min.css">
-		<link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
-	</head>
-
-	<body class="fondo">
-		<div class="form-wrapper">
-			<div class="container-login">
-				E A I xuuxuu, tudo certo? <3
-			</div>
-	
+<div class="row">
+	<div class="col-md-5">
+		{% with messages = get_flashed_messages()  %}
+		{% if messages %}
+		{% for message in messages %}
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+			{{ message }}
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
 		</div>
-		<!-- jQuery and JS bundle w/ Popper.js -->
-		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-		<script src="{{url_for('static',filename='js/main.js')}}"></script>
-	</body>
-</html>
+		{% endfor %}
+		{% endif %}
+		{% endwith %}
+		<div class="card card-body">
+			<form action="{{url_for('add_user')}}" method="POST">
+				<div class="form-group">
+					<input type="text" class="form-control" name="name" placeholder="Name">
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" name="lastname" placeholder="Lastname">
+				</div>
+				<button class="btn btn-primary btn-block">
+					Save 
+				</button>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-7">
+		<table class="table table-striped table-hover table-bordered table-sm bg-white">
+			<thead>
+				<tr>
+					<td>ID</td>
+					<td>name</td>
+					<td>lastname</td>
+					<td>Operations</td>
+				</tr>
+			</thead>
+			<tbody>
+				{% for user in users %}
+				<tr>
+					<td>{{user.0}}</td>
+					<td>{{user.1}}</td>
+					<td>{{user.2}}</td>
+					<td>
+						<a href="/edit/{{user.0}}" class="btn btn-secondary">edit</a>
+						<a href="/delete/{{user.0}}" class="btn btn-danger btn-delete">delete</a>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+</div>
+
+{% endblock %}
